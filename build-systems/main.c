@@ -1,0 +1,36 @@
+#include <stdint.h>
+
+#define PERIPH_BASE 0x40000000UL
+
+#define GPIOA_OFFSET (0x20000UL)
+#define GPIOA_BASE   PERIPH_BASE + GPIOA_OFFSET
+#define GPIOA_PA5    (1U << 5)
+#define LED_PIN      GPIOA_PA5 
+
+#define MODER_OFFSET   (0x00UL)
+#define GPIOA_MODER    (*(volatile uint32_t*)(GPIOA_BASE + MODER_OFFSET))
+#define MODER_PA5_BIT0 (1U << 10)
+#define MODER_PA5_BIT1 (1U << 11)
+
+#define ODR_OFFSET (0x14UL)
+#define GPIOA_ODR  (*(volatile uint32_t*)(GPIOA_BASE + ODR_OFFSET))
+
+#define RCC_OFFSET         (0x23800UL)
+#define RCC_BASE           PERIPH_BASE + RCC_OFFSET
+#define RCC_AHB1ENR_OFFSET (0x30UL)
+#define RCC_AHB1ENR        (*(volatile uint32_t*)(RCC_BASE + RCC_AHB1ENR_OFFSET))
+#define RCC_GPIOAEN        (1U << 0)
+
+int main(void)
+{
+    // Enable RCC for Port A
+    RCC_AHB1ENR |= RCC_GPIOAEN;
+    // Set MODER of GPIOA to 01 for general-purpose output
+    GPIOA_MODER |= MODER_PA5_BIT0;
+
+    // Loop Forever
+	for(;;) {
+        GPIOA_ODR ^= LED_PIN;
+        for (volatile uint32_t i = 0; i < 0x5FFFF; i++) { }
+    }
+}

@@ -1,0 +1,25 @@
+[
+  {
+    "arguments": [
+      "/opt/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc",
+      "-c",
+      "-mcpu=cortex-m4",
+      "-mthumb",
+      "-std=gnu11",
+      "-D",
+      "STM32F446xx",
+      "-I",
+      "inc",
+      "-I",
+      "inc/CMSIS/Include",
+      "-I",
+      "inc/CMSIS/Device/ST/STM32F4xx/Include",
+      "-o",
+      "main.o",
+      "main.c"
+    ],
+    "directory": "/home/rami/CProjects/ARM-Projects/sys-tick",
+    "file": "/home/rami/CProjects/ARM-Projects/sys-tick/main.c",
+    "output": "/home/rami/CProjects/ARM-Projects/sys-tick/main.o"
+  }
+]
