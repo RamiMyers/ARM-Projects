@@ -5,14 +5,17 @@
 
 #define PERIPH_BASE 0x40000000UL
 
-#define GPIOA_OFFSET (0x20000UL)
+#define GPIOA_OFFSET 0x20000UL
 #define GPIOA_BASE   (PERIPH_BASE + GPIOA_OFFSET)
 
-#define RCC_OFFSET  (0x23800UL)
+#define RCC_OFFSET  0x23800UL
 #define RCC_BASE    (PERIPH_BASE + RCC_OFFSET)
 
-#define TIM2_OFFSET (0x00000UL)
+#define TIM2_OFFSET 0x00000UL
 #define TIM2_BASE   (PERIPH_BASE + TIM2_OFFSET)
+
+#define UART4_OFFSET 0x04C00
+#define UART4_BASE   (PERIPH_BASE + UART4_OFFSET)
 
 typedef struct
 {
@@ -48,8 +51,17 @@ typedef struct
     volatile uint32_t ARR;
 } TIM_Struct;
 
+typedef struct
+{
+    volatile uint32_t SR;
+    volatile uint32_t DR;
+    volatile uint32_t BRR;
+    volatile uint32_t CR1;
+} USART_Struct;
+
 #define RCC   ((RCC_Struct*)RCC_BASE)
 #define GPIOA ((GPIO_Struct*)GPIOA_BASE)
 #define TIM2  ((TIM_Struct*)TIM2_BASE)
+#define  UART4 ((USART_Struct*)UART4_BASE)
 
 #endif
