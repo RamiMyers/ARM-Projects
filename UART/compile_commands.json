@@ -1,7 +1,7 @@
 [
   {
     "arguments": [
-      "/opt/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc",
+      "/usr/bin/arm-none-eabi-gcc",
       "-c",
       "-mcpu=cortex-m4",
       "-mthumb",
@@ -18,8 +18,77 @@
       "main.o",
       "main.c"
     ],
-    "directory": "/home/rami/CProjects/ARM-Projects/sys-tick",
-    "file": "/home/rami/CProjects/ARM-Projects/sys-tick/main.c",
-    "output": "/home/rami/CProjects/ARM-Projects/sys-tick/main.o"
+    "directory": "/home/rami/CProjects/ARM-Projects/UART",
+    "file": "/home/rami/CProjects/ARM-Projects/UART/main.c",
+    "output": "/home/rami/CProjects/ARM-Projects/UART/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/arm-none-eabi-gcc",
+      "-c",
+      "-mcpu=cortex-m4",
+      "-mthumb",
+      "-std=gnu11",
+      "-D",
+      "STM32F446xx",
+      "-I",
+      "inc",
+      "-I",
+      "inc/CMSIS/Include",
+      "-I",
+      "inc/CMSIS/Device/ST/STM32F4xx/Include",
+      "-o",
+      "syscall.o",
+      "syscall.c"
+    ],
+    "directory": "/home/rami/CProjects/ARM-Projects/UART",
+    "file": "/home/rami/CProjects/ARM-Projects/UART/syscall.c",
+    "output": "/home/rami/CProjects/ARM-Projects/UART/syscall.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/arm-none-eabi-gcc",
+      "-c",
+      "-mcpu=cortex-m4",
+      "-mthumb",
+      "-std=gnu11",
+      "-D",
+      "STM32F446xx",
+      "-I",
+      "inc",
+      "-I",
+      "inc/CMSIS/Include",
+      "-I",
+      "inc/CMSIS/Device/ST/STM32F4xx/Include",
+      "-o",
+      "sysmem.o",
+      "sysmem.c"
+    ],
+    "directory": "/home/rami/CProjects/ARM-Projects/UART",
+    "file": "/home/rami/CProjects/ARM-Projects/UART/sysmem.c",
+    "output": "/home/rami/CProjects/ARM-Projects/UART/sysmem.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/arm-none-eabi-gcc",
+      "-c",
+      "-mcpu=cortex-m4",
+      "-mthumb",
+      "-std=gnu11",
+      "-D",
+      "STM32F446xx",
+      "-I",
+      "inc",
+      "-I",
+      "inc/CMSIS/Include",
+      "-I",
+      "inc/CMSIS/Device/ST/STM32F4xx/Include",
+      "-o",
+      "startup_stm32f446xx.o",
+      "startup_stm32f446xx.s"
+    ],
+    "directory": "/home/rami/CProjects/ARM-Projects/UART",
+    "file": "/home/rami/CProjects/ARM-Projects/UART/startup_stm32f446xx.s",
+    "output": "/home/rami/CProjects/ARM-Projects/UART/startup_stm32f446xx.o"
   }
 ]

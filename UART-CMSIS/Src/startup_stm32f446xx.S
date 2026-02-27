@@ -94,7 +94,6 @@ LoopFillZerobss:
 /* Call the application's entry point.*/
   bl main
 
-
 LoopForever:
   b LoopForever
 
