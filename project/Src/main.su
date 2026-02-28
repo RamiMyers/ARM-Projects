@@ -1,0 +1,9 @@
+Inc/led.h:24:20:ledInit	4	static
+Inc/led.h:33:20:ledSet	4	static
+Inc/led.h:37:20:ledReset	4	static
+Inc/led.h:41:20:ledToggle	8	static
+Inc/timer.h:20:20:tim2_1Hz_Init	4	static
+Inc/uart.h:31:20:uartInit	4	static
+Inc/uart.h:54:20:uartWrite	16	static
+Inc/uart.h:60:5:__io_putchar	16	static
+Src/main.c:26:5:main	40	static

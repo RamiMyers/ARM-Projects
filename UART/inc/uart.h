@@ -54,4 +54,9 @@ static inline void uartPrint(const char* str) {
     while (*str) uartWrite((uint8_t)*str++);
 }
 
+int __io_putchar(int ch) {
+    uartWrite((uint8_t)ch);
+    return ch;
+}
+
 #endif

@@ -1,10 +1,8 @@
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 #include "timer.h"
 #include "uart.h"
-
-// TODO: Include string.h
-// TODO: Connect UART via printf
 
 int main(void)
 {
@@ -24,6 +22,7 @@ int main(void)
         while (!(TIM2->SR & SR_UIF));
         TIM2->SR &= ~SR_UIF;
 
+        printf("Formatted string: %s", str);
         for (int i = 0; i < strlen(str); i++)
             uartWrite(str[i]);
     }
