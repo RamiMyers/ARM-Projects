@@ -8,6 +8,9 @@
 #define GPIOA_OFFSET 0x20000UL
 #define GPIOA_BASE   (PERIPH_BASE + GPIOA_OFFSET)
 
+#define GPIOC_OFFSET 0x20800UL
+#define GPIOC_BASE   (PERIPH_BASE + GPIOC_OFFSET)
+
 #define RCC_OFFSET  0x23800UL
 #define RCC_BASE    (PERIPH_BASE + RCC_OFFSET)
 
@@ -61,6 +64,7 @@ typedef struct
 
 #define RCC    ((RCC_Struct*)RCC_BASE)
 #define GPIOA  ((GPIO_Struct*)GPIOA_BASE)
+#define GPIOC  ((GPIO_Struct*)GPIOC_BASE)
 #define TIM2   ((TIM_Struct*)TIM2_BASE)
 #define USART2 ((USART_Struct*)USART2_BASE)
 

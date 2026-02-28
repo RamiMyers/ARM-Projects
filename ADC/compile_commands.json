@@ -1,0 +1,66 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/arm-none-eabi-gcc",
+      "-mcpu=cortex-m4",
+      "-mthumb",
+      "-c",
+      "-std=gnu11",
+      "-Iinc",
+      "-o",
+      "build/main.o",
+      "main.c"
+    ],
+    "directory": "/home/rami/CProjects/ARM-Projects/ADC",
+    "file": "/home/rami/CProjects/ARM-Projects/ADC/main.c",
+    "output": "/home/rami/CProjects/ARM-Projects/ADC/build/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/arm-none-eabi-gcc",
+      "-mcpu=cortex-m4",
+      "-mthumb",
+      "-c",
+      "-std=gnu11",
+      "-Iinc",
+      "-o",
+      "build/syscall.o",
+      "syscall.c"
+    ],
+    "directory": "/home/rami/CProjects/ARM-Projects/ADC",
+    "file": "/home/rami/CProjects/ARM-Projects/ADC/syscall.c",
+    "output": "/home/rami/CProjects/ARM-Projects/ADC/build/syscall.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/arm-none-eabi-gcc",
+      "-mcpu=cortex-m4",
+      "-mthumb",
+      "-c",
+      "-std=gnu11",
+      "-Iinc",
+      "-o",
+      "build/sysmem.o",
+      "sysmem.c"
+    ],
+    "directory": "/home/rami/CProjects/ARM-Projects/ADC",
+    "file": "/home/rami/CProjects/ARM-Projects/ADC/sysmem.c",
+    "output": "/home/rami/CProjects/ARM-Projects/ADC/build/sysmem.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/arm-none-eabi-gcc",
+      "-mcpu=cortex-m4",
+      "-mthumb",
+      "-c",
+      "-std=gnu11",
+      "-Iinc",
+      "-o",
+      "build/startup_stm32f446xx.o",
+      "startup_stm32f446xx.s"
+    ],
+    "directory": "/home/rami/CProjects/ARM-Projects/ADC",
+    "file": "/home/rami/CProjects/ARM-Projects/ADC/startup_stm32f446xx.s",
+    "output": "/home/rami/CProjects/ARM-Projects/ADC/build/startup_stm32f446xx.o"
+  }
+]

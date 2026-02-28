@@ -8,6 +8,9 @@
 #define GPIOA_OFFSET 0x20000UL
 #define GPIOA_BASE   (PERIPH_BASE + GPIOA_OFFSET)
 
+#define GPIOC_OFFSET 0x20800UL
+#define GPIOC_BASE   (PERIPH_BASE + GPIOC_OFFSET)
+
 #define RCC_OFFSET  0x23800UL
 #define RCC_BASE    (PERIPH_BASE + RCC_OFFSET)
 
@@ -16,6 +19,9 @@
 
 #define USART2_OFFSET 0x04400UL
 #define USART2_BASE   (PERIPH_BASE + USART2_OFFSET)
+
+#define ADC1_OFFSET 0x12000UL
+#define ADC1_BASE   (PERIPH_BASE + ADC1_OFFSET)
 
 typedef struct
 {
@@ -38,6 +44,7 @@ typedef struct
     volatile uint32_t AHB1ENR;
     volatile uint32_t PADDING2[3];
     volatile uint32_t APB1ENR;
+    volatile uint32_t APB2ENR;
 } RCC_Struct;
 
 typedef struct
@@ -59,9 +66,24 @@ typedef struct
     volatile uint32_t CR1;
 } USART_Struct;
 
+typedef struct
+{
+    volatile uint32_t SR;
+    volatile uint32_t CR1;
+    volatile uint32_t CR2;
+    volatile uint32_t PADDING1[8];
+    volatile uint32_t SQR1;
+    volatile uint32_t SQR2;
+    volatile uint32_t SQR3;
+    volatile uint32_t PADDING2[5];
+    volatile uint32_t DR;
+} ADC_Struct;
+
 #define RCC    ((RCC_Struct*)RCC_BASE)
 #define GPIOA  ((GPIO_Struct*)GPIOA_BASE)
+#define GPIOC  ((GPIO_Struct*)GPIOC_BASE)
 #define TIM2   ((TIM_Struct*)TIM2_BASE)
 #define USART2 ((USART_Struct*)USART2_BASE)
+#define ADC1   ((ADC_Struct*)ADC1_BASE)
 
 #endif
