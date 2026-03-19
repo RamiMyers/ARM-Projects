@@ -15,8 +15,8 @@ int main(void)
 
     // Loop Forever
 	for(;;) {
-        while (!(TIM2->SR & SR_UIF));
-        TIM2->SR &= ~SR_UIF;
+        while (!(TIM2->SR & TIM_UIF));
+        TIM2->SR &= ~TIM_UIF;
 
         adcStartConversion();
         value = adcRead();
