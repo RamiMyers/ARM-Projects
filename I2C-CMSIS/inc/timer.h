@@ -10,7 +10,7 @@
 #define PRESCALE 16000
 #define AUTO_RELOAD 1000
 
-static inline void tim2_1Hz_Init(void) {
+static inline void TIM2_1Hz_Init(void) {
     RCC->APB1ENR |= RCC_TIM2EN;
 
     TIM2->PSC = PRESCALE - 1;

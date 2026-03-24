@@ -29,7 +29,7 @@
 #define AFRL_PA3_BIT2  (1U << 14)
 #define AFRL_PA3_BIT3  (1U << 15)
 
-static inline void uartInit(void) {
+static inline void USART2_Init(void) {
     // Enable RCC for GPIOA
     RCC->AHB1ENR |= RCC_GPIOA;
 
@@ -64,20 +64,20 @@ static inline void uartInit(void) {
     USART2->CR1 |= UART_UE;
 }
 
-static inline void uartWrite(uint8_t ch) {
+static inline void USART2_Write(uint8_t ch) {
     // Wait for SR to be empty
     while (!(USART2->SR & UART_TXE));
     USART2->DR = ch & 0xFF;
 }
 
-static inline uint8_t uartRead(void) {
+static inline uint8_t USART2_Read(void) {
     // Wait for data to arrive
     while (!(USART2->SR & UART_RXNE));
     return USART2->DR & 0xFF;
 }
 
 int __io_putchar(int ch) {
-    uartWrite((uint8_t)ch);
+    USART2_Write((uint8_t)ch);
     return ch;
 }
 

@@ -18,7 +18,7 @@
 #define ADC_EOC     (1U << 1)
 
 
-void adc1_Init(void) {
+void ADC1_Init(void) {
     // Configure PA0 for Analaog Mode
     RCC->AHB1ENR |= RCC_GPIOAEN;
 
@@ -36,14 +36,14 @@ void adc1_Init(void) {
     ADC1->CR2 |= ADC_ADON;
 }
 
-void adcStartConversion(void) {
+void ADC1_StartConversion(void) {
     // Configure ADC for discontinuous mode
     ADC1->CR2 &= ~ADC_CONT;
     // Start conversion
     ADC1->CR2 |= ADC_SWSTART;
 }
 
-uint32_t adcRead(void) {
+uint32_t ADC1_Read(void) {
     // Wait for end of conversion
     while (!(ADC1->SR & ADC_EOC));
     // Return value

@@ -20,7 +20,7 @@ typedef struct
 
 #define MSEC_TICK 16000 /* 16,00,000 Hz (Internal Clock Frequency) / 1000 msec (1000 msec in 1 second) = 16,000 ticks; Clock ticks every 1 msec */
 
-static inline void systickMsecDelay(uint32_t msec) {
+static inline void SYSTICK_MsecDelay(uint32_t msec) {
     SYSTICK->RVR = MSEC_TICK - 1;
     SYSTICK->CVR = 0;
     SYSTICK->CSR = SYSTICK_CLKSOURCE | SYSTICK_ENABLE;
