@@ -17,6 +17,7 @@
 
 #define PWR_MGMT_1_VALUE 0x01
 
+#define SCALE_FACTOR 16384.0f
 void ICM_Init(void);
 uint8_t ICM_ReadRegister(uint8_t maddr);
 void ICM_WriteRegister(uint8_t maddr, uint8_t data);

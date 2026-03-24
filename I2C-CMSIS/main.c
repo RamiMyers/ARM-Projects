@@ -6,15 +6,14 @@
 #include "icm-20948.h"
 #include "systick.h"
 
-// TODO: Verify acceleration scaling with ChatGPT
-// TODO: Experiment with accel. offset registers
+// TODO: Review correct I2C functionality for reading multiple registers
 
-int main(void)
-{
+int main(void) {
     uint8_t data;
     uint8_t accelX_High, accelX_Low;
-    int16_t rawAccelX;
-    float accelX;
+    int16_t rawAccelX, rawAccelY, rawAccelZ;
+    float accelX, accelY, accelZ;
+    uint8_t accBytes[6];
 
     ICM_Init();
     USART2_Init();
@@ -23,12 +22,15 @@ int main(void)
     printf("Starting Loop\r\n");
 	for(;;) {
         SYSTICK_MsecDelay(100);
-        data = ICM_ReadRegister(WHO_AM_I);
-        accelX_High = ICM_ReadRegister(ACCEL_XOUT_H);
-        accelX_Low = ICM_ReadRegister(ACCEL_XOUT_L);
-        rawAccelX = (int16_t)(accelX_High << 8) | accelX_Low;
+        I2C1_BurstRead(SLAVE_ADDR, 0x2D, 6, accBytes);
+        rawAccelX = (int16_t)(accBytes[0] << 8) | accBytes[1]; 
+        rawAccelY = (int16_t)(accBytes[2] << 8) | accBytes[3]; 
+        rawAccelZ = (int16_t)(accBytes[4] << 8) | accBytes[5]; 
         accelX = rawAccelX / 16384.0f;
-        printf("0x%X\r\n", data);
+        accelY = rawAccelY / 16384.0f;
+        accelZ = rawAccelZ / 16384.0f;
         printf("X Acceleration: %f g\r\n", accelX);
+        printf("Y Acceleration: %f g\r\n", accelY);
+        printf("Z Acceleration: %f g\r\n", accelZ);
     }
 }
