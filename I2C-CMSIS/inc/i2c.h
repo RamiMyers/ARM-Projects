@@ -202,26 +202,42 @@ void I2C1_BurstRead(uint8_t saddr, uint8_t maddr, uint8_t n, uint8_t* buffer) {
     // Wait Until Receiver is Not Empty
     while (!(I2C1->SR1 & I2C1_RXNE));
 
+    I2C1->CR1 |= I2C1_ACK;
+
     // Read Data Until n is 0
     while (n > 0) {
-        printf("n: %d\r\n", n);
-        printf("Receive Not Empty\r\n");
-
-        // Read Contents of DR into a Buffer
-        *buffer++ = I2C1->DR;
-
-        if (n > 1) {
-            // Set ACK Bit to Prepare for Next Receive
-            I2C1->CR1 |= I2C1_ACK;
-        } else {
-            // Disable ACK Bit to Prepare for Stop Bit
+        printf("Iteration: %d\r\n", n);
+        if (n == 1) {
             I2C1->CR1 &= ~I2C1_ACK;
-
-            // Generate Stop Bit
             I2C1->CR1 |= I2C1_STOP;
-        }
+            while (!(I2C1->SR1 & I2C1_RXNE));
 
-        n--;
+            *buffer++ = I2C1->DR;
+        } else {
+            while (!(I2C1->SR1 & I2C1_RXNE));
+
+            *buffer++ = I2C1->DR;
+
+            n--;
+        }
+        // printf("n: %d\r\n", n);
+        // printf("Receive Not Empty\r\n");
+
+        // // Read Contents of DR into a Buffer
+        // *buffer++ = I2C1->DR;
+
+        // if (n > 1) {
+        //     // Set ACK Bit to Prepare for Next Receive
+        //     I2C1->CR1 |= I2C1_ACK;
+        // } else {
+        //     // Disable ACK Bit to Prepare for Stop Bit
+        //     I2C1->CR1 &= ~I2C1_ACK;
+
+        //     // Generate Stop Bit
+        //     I2C1->CR1 |= I2C1_STOP;
+        // }
+
+        // n--;
     }
 }
 
