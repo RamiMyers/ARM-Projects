@@ -43,7 +43,7 @@
 #define I2C1_ACK   (1U << 10)
 #define I2C1_SR1_BTF (1U << 2)
 
-void I2C1_Init(void) {
+static inline void I2C1_Init(void) {
     // Enable RCC for GPIO Port of I2C1 Pins
     RCC->AHB1ENR |= RCC_GPIOBEN;
 
@@ -98,7 +98,7 @@ void I2C1_Init(void) {
     I2C1->CR1 |= I2C1_PE;
 }
 
-uint8_t I2C1_ByteRead(uint8_t saddr, uint8_t maddr) {
+static inline uint8_t I2C1_ByteRead(uint8_t saddr, uint8_t maddr) {
     volatile uint32_t tmp;
 
     // Wait Until the Bus is Not Busy
@@ -155,93 +155,135 @@ uint8_t I2C1_ByteRead(uint8_t saddr, uint8_t maddr) {
     return I2C1->DR;
 }
 
-void I2C1_BurstRead(uint8_t saddr, uint8_t maddr, uint8_t n, uint8_t* buffer) {
+static inline void I2C1_BurstRead(uint8_t saddr, uint8_t maddr, uint8_t n, uint8_t *buffer) {
     volatile uint32_t tmp;
 
-    // Wait Until the Bus is Not Busy
-    while (I2C1->SR2 & I2C1_BUSY);
+    if (n == 0) return;
 
-    // Generate Start Bit
-    I2C1->CR1 |= I2C1_START;
+    // Wait until bus is free
+    while (I2C1->SR2 & I2C_SR2_BUSY);
 
-    // Wait Until Start Flag is Set
-    while (!(I2C1->SR1 & I2C1_SB));
+    // START
+    I2C1->CR1 |= I2C_CR1_START;
+    while (!(I2C1->SR1 & I2C_SR1_SB));
 
-    // Set Slave Address + Write Bit (0)
-    I2C1->DR = saddr << 1;
-
-    // Wait Until Address Flag is Set
-    while (!(I2C1->SR1 & I2C1_ADDR));
-
-    // Clear Address Flag
+    // Send slave address + write
+    I2C1->DR = (saddr << 1);
+    while (!(I2C1->SR1 & I2C_SR1_ADDR));
     tmp = I2C1->SR1;
     tmp = I2C1->SR2;
 
-    // Send Memory Address
+    // Send memory/register address
+    while (!(I2C1->SR1 & I2C_SR1_TXE));
     I2C1->DR = maddr;
 
-    // Wait Until Transmitter Empty
-    while (!(I2C1->SR1 & I2C1_TXE));
+    // Wait until byte transfer finished before repeated START
+    while (!(I2C1->SR1 & I2C_SR1_BTF));
 
-    // Generate Another Start Bit
-    I2C1->CR1 |= I2C1_START;
+    // Repeated START
+    I2C1->CR1 |= I2C_CR1_START;
+    while (!(I2C1->SR1 & I2C_SR1_SB));
 
-    // Wait Until Restart Flag is Set
-    while (!(I2C1->SR1 & I2C1_SB));
-
-    // Set Slave Address + Read Bit (1)
+    // Send slave address + read
     I2C1->DR = (saddr << 1) | 1;
+    while (!(I2C1->SR1 & I2C_SR1_ADDR));
 
-    // Wait Until Address Flag is Set
-    while (!(I2C1->SR1 & I2C1_ADDR));
-
-    // Clear Address Flag
+    I2C1->CR1 |= I2C_CR1_ACK;
     tmp = I2C1->SR1;
     tmp = I2C1->SR2;
 
-    // Wait Until Receiver is Not Empty
-    while (!(I2C1->SR1 & I2C1_RXNE));
-
-    I2C1->CR1 |= I2C1_ACK;
-
-    // Read Data Until n is 0
-    while (n > 0) {
-        printf("Iteration: %d\r\n", n);
-        if (n == 1) {
-            I2C1->CR1 &= ~I2C1_ACK;
-            I2C1->CR1 |= I2C1_STOP;
-            while (!(I2C1->SR1 & I2C1_RXNE));
-
-            *buffer++ = I2C1->DR;
-        } else {
-            while (!(I2C1->SR1 & I2C1_RXNE));
-
-            *buffer++ = I2C1->DR;
-
-            n--;
-        }
-        // printf("n: %d\r\n", n);
-        // printf("Receive Not Empty\r\n");
-
-        // // Read Contents of DR into a Buffer
-        // *buffer++ = I2C1->DR;
-
-        // if (n > 1) {
-        //     // Set ACK Bit to Prepare for Next Receive
-        //     I2C1->CR1 |= I2C1_ACK;
-        // } else {
-        //     // Disable ACK Bit to Prepare for Stop Bit
-        //     I2C1->CR1 &= ~I2C1_ACK;
-
-        //     // Generate Stop Bit
-        //     I2C1->CR1 |= I2C1_STOP;
-        // }
-
-        // n--;
+    while (n > 3) {
+        while (!(I2C1->SR1 & I2C_SR1_RXNE));
+        *buffer++ = I2C1->DR;
+        n--;
     }
+
+    // n == 3
+    while (!(I2C1->SR1 & I2C_SR1_BTF));
+    I2C1->CR1 &= ~I2C_CR1_ACK;
+
+    *buffer++ = I2C1->DR;
+    n--;
+
+    while (!(I2C1->SR1 & I2C_SR1_BTF));
+    I2C1->CR1 |= I2C_CR1_STOP;
+
+    *buffer++ = I2C1->DR;
+    *buffer++ = I2C1->DR;
+
+    // Restore defaults
+    I2C1->CR1 |= I2C_CR1_ACK;
+    I2C1->CR1 &= ~I2C_CR1_POS;
 }
 
-void I2C1_ByteWrite(uint8_t saddr, uint8_t maddr, uint8_t data) {
+// static inline void I2C1_BurstRead(uint8_t saddr, uint8_t maddr, uint8_t n, uint8_t* buffer) {
+//     volatile uint32_t tmp;
+
+//     // Wait Until the Bus is Not Busy
+//     while (I2C1->SR2 & I2C1_BUSY);
+
+//     // Generate Start Bit
+//     I2C1->CR1 |= I2C1_START;
+
+//     // Wait Until Start Flag is Set
+//     while (!(I2C1->SR1 & I2C1_SB));
+
+//     // Set Slave Address + Write Bit (0)
+//     I2C1->DR = saddr << 1;
+
+//     // Wait Until Address Flag is Set
+//     while (!(I2C1->SR1 & I2C1_ADDR));
+
+//     // Clear Address Flag
+//     tmp = I2C1->SR1;
+//     tmp = I2C1->SR2;
+
+//     // Send Memory Address
+//     I2C1->DR = maddr;
+
+//     // Wait Until Transmitter Empty
+//     while (!(I2C1->SR1 & I2C1_TXE));
+
+//     // Generate Another Start Bit
+//     I2C1->CR1 |= I2C1_START;
+
+//     // Wait Until Restart Flag is Set
+//     while (!(I2C1->SR1 & I2C1_SB));
+
+//     // Set Slave Address + Read Bit (1)
+//     I2C1->DR = (saddr << 1) | 1;
+
+//     // Wait Until Address Flag is Set
+//     while (!(I2C1->SR1 & I2C1_ADDR));
+
+//     I2C1->CR1 |= I2C1_ACK;
+
+//     // Clear Address Flag
+//     tmp = I2C1->SR1;
+//     tmp = I2C1->SR2;
+
+//     // Wait Until Receiver is Not Empty
+//     while (!(I2C1->SR1 & I2C1_RXNE));
+
+//     // Read Data Until n is 0
+//     while (n > 0) {
+//         printf("Iteration: %d\r\n", n);
+//         if (n == 1) {
+//             I2C1->CR1 &= ~I2C1_ACK;
+//             I2C1->CR1 |= I2C1_STOP;
+//             while (!(I2C1->SR1 & I2C1_RXNE));
+
+//             *buffer++ = I2C1->DR;
+//         } else {
+//             while (!(I2C1->SR1 & I2C1_RXNE));
+
+//             *buffer++ = I2C1->DR;
+//         }
+//         n--;
+//     }
+// }
+
+static inline void I2C1_ByteWrite(uint8_t saddr, uint8_t maddr, uint8_t data) {
     volatile uint8_t tmp;
 
     // Wait Until the Bus is Not Busy

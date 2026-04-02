@@ -6,7 +6,7 @@
 #include "icm-20948.h"
 #include "systick.h"
 
-// TODO: Review correct I2C functionality for reading multiple registers
+// TODO: Study ChatGPT's solution to I2C burst read
 
 int main(void) {
     uint8_t data;

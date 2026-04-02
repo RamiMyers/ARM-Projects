@@ -18,11 +18,12 @@
 #define PWR_MGMT_1_VALUE 0x01
 
 #define SCALE_FACTOR 16384.0f
-void ICM_Init(void);
-uint8_t ICM_ReadRegister(uint8_t maddr);
-void ICM_WriteRegister(uint8_t maddr, uint8_t data);
 
-void ICM_Init(void) {
+static inline void ICM_Init(void);
+static inline uint8_t ICM_ReadRegister(uint8_t maddr);
+static inline void ICM_WriteRegister(uint8_t maddr, uint8_t data);
+
+static inline void ICM_Init(void) {
     I2C1_Init();
 
     ICM_WriteRegister(PWR_MGMT_1, PWR_MGMT_1_VALUE);
@@ -31,11 +32,11 @@ void ICM_Init(void) {
     ICM_WriteRegister(REG_BANK_SEL, (0x0 << 4));
 }
 
-uint8_t ICM_ReadRegister(uint8_t maddr) {
+static inline uint8_t ICM_ReadRegister(uint8_t maddr) {
     return I2C1_ByteRead(SLAVE_ADDR, maddr);
 }
 
-void ICM_WriteRegister(uint8_t maddr, uint8_t data) {
+static inline void ICM_WriteRegister(uint8_t maddr, uint8_t data) {
     I2C1_ByteWrite(SLAVE_ADDR, maddr, data);
 }
 
