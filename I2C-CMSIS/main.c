@@ -6,8 +6,8 @@
 #include "icm-20948.h"
 #include "systick.h"
 
-// TODO: Copy and paste book I2C burst read solution, and modify
-// TODO: Study ChatGPT's solution to I2C burst read
+// TODO: Refactor i2c.h to adhere to better macro-naming practices: <peripheral>_<register>_<bit>
+// TODO: Experiment with burst read function: read 2 bytes, and then 1, to ensure that everything is working properly.
 
 int main(void) {
     uint8_t data;

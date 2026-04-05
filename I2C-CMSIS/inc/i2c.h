@@ -99,7 +99,7 @@ static inline void I2C1_Init(void) {
 }
 
 /* 
-- Controller receiving does not have to wait for TxE after SB generation 
+* Controller receiving does not have to wait for TxE after SB generation 
 */
 static inline uint8_t I2C1_ByteRead(uint8_t saddr, uint8_t maddr) {
     volatile uint32_t tmp;
@@ -134,6 +134,9 @@ static inline uint8_t I2C1_ByteRead(uint8_t saddr, uint8_t maddr) {
 
     // Wait Until Restart Flag is Set
     while (!(I2C1->SR1 & I2C1_SB));
+
+    // Read SR1
+    tmp = I2C1->SR1;
 
     // Set Slave Address + Read Bit (1)
     I2C1->DR = (saddr << 1) | 1;
@@ -170,6 +173,9 @@ static inline void I2C1_BurstRead(uint8_t saddr, uint8_t maddr, uint8_t n, uint8
     // Wait Until Start Flag is Set 
     while (!(I2C1->SR1 & I2C1_SB)); 
 
+    // Clear Start Bit
+    tmp = I2C1->SR1;
+
     // Set Slave Address + Write Bit (0) 
     I2C1->DR = saddr << 1; 
 
@@ -192,6 +198,9 @@ static inline void I2C1_BurstRead(uint8_t saddr, uint8_t maddr, uint8_t n, uint8
     // Wait Until Restart Flag is Set 
     while (!(I2C1->SR1 & I2C1_SB)); 
 
+    // Clear Start Bit
+    tmp = I2C1->SR1;
+
     // Set Slave Address + Read Bit (1) 
     I2C1->DR = (saddr << 1) | 1; 
     
@@ -210,12 +219,9 @@ static inline void I2C1_BurstRead(uint8_t saddr, uint8_t maddr, uint8_t n, uint8
         if (n == 1) { 
             I2C1->CR1 &= ~I2C1_ACK; 
             I2C1->CR1 |= I2C1_STOP; 
-            while (!(I2C1->SR1 & I2C1_RXNE)); 
-            *buffer++ = I2C1->DR; 
-        } else { 
-            while (!(I2C1->SR1 & I2C1_RXNE)); 
-            *buffer++ = I2C1->DR; 
-        } 
+        }        
+        while (!(I2C1->SR1 & I2C1_RXNE)); 
+        *buffer++ = I2C1->DR; 
         n--; 
     } 
 }
