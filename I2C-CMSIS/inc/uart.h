@@ -53,14 +53,29 @@ static inline void USART2_Init(void) {
     RCC->APB1ENR |= RCC_USART2;
 
     // Calculate baud rate divisor
-    /* round(y/x) = (y + (x/2)) / x */
+    /* BRR stores the buad rate divisor (SYS_CLOCK_FREQ / BUAD_RATE). 
+       When rounded, the equation results in the proper binary form when oversampled by 16,
+       with a 12-bit mantissa and 4-bit fraction.
+       round(x / y) = floor((x + (y / 2)) / y) */
     USART2->BRR = (SYSTEM_CLOCK_FREQ + (BAUD_RATE / 2U)) / BAUD_RATE;
+
+    /*
+    Alternate method of calculating BRR: 
+        - Uses the formula of SYS_CLOCK_FREQ / (OVERSAMPLING * BAUD_RATE)
+        - Extracts mantissa by flooring the result
+        - Extracts fraction by subtracting mantissa from result, and multiplying by 16 (4 bits) to convert it to its 4-bit binary form
+
+    float USART_Div = (float)(SYSTEM_CLOCK_FREQ / (16.0f * BAUD_RATE));
+    uint16_t divMantissa = USART_Div;
+    uint8_t divFraction = (float)((USART_Div - divMantissa) * 16);
+    USART2->BRR = (divMantissa << 4) | divFraction;
+    */
 
     // Enable TX & RX 
     USART2->CR1 |= UART_RE;
     USART2->CR1 |= UART_TE;
 
-    // Enalbe UART
+    // Enable UART
     USART2->CR1 |= UART_UE;
 }
 
