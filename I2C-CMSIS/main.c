@@ -6,6 +6,7 @@
 #include "icm-20948.h"
 #include "systick.h"
 
+// TODO: Copy and paste book I2C burst read solution, and modify
 // TODO: Study ChatGPT's solution to I2C burst read
 
 int main(void) {
