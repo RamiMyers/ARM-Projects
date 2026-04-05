@@ -8,8 +8,6 @@
 #define I2C1_CCR        80   /* CCR = Peripheral Clock Freq. / (2 * SCL Freq.) = 16,000,000 / (2 * 100,000) = 80 */
 #define I2C1_TRISE      0x11 /* TRISE = Peripheral Clock Freq. MHz + 1 = 17 */
 
-// TODO: Use provided CMSIS macros for GPIO and RCC
-
 static inline void I2C1_Init(void) {
     // Enable RCC for GPIO Port of I2C1 Pins
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
