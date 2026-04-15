@@ -6,11 +6,8 @@
 #include "systick.h"
 #include "icm-20948-spi.h"
 
-// TODO: Verify SPI1 config with ChatGPT
-
 int main(void) {
-    uint8_t rawAccel[6];
-    uint16_t rawAccelX;
+    float accel[3];
 
     USART2_Init();
     ICM_Init();
@@ -20,9 +17,9 @@ int main(void) {
     printf("Starting Loop\r\n");
 	for(;;) {
         SYSTICK_MsecDelay(100);
-        printf("Delayed\r\n");
-        // ICM_Read(ACCEL_DATA_START, rawAccel, 6);
-        // rawAccelX = rawAccel[0] | (rawAccel[1] << 0x8U);
-        // printf("Raw X Acceleration: %d\r\n", rawAccelX);
+        ICM_ReadAccel(accel);
+        printf("X Acceleration: %f\r\n", accel[0]);
+        printf("Y Acceleration: %f\r\n", accel[1]);
+        printf("Z Acceleration: %f\r\n", accel[2]);
     }
 }
