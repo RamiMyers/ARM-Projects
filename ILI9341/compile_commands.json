@@ -1,0 +1,21 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/arm-none-eabi-gcc",
+      "-mcpu=cortex-m4",
+      "-mthumb",
+      "-Iinc",
+      "-Iinc/CMSIS/Include",
+      "-Iinc/CMSIS/Device/ST/STM32F4xx/Include",
+      "-DSTM32F446xx",
+      "-c",
+      "-std=gnu11",
+      "-o",
+      "build/main.o",
+      "main.c"
+    ],
+    "directory": "/home/rami/CProjects/ARM-Projects/ILI9341",
+    "file": "/home/rami/CProjects/ARM-Projects/ILI9341/main.c",
+    "output": "/home/rami/CProjects/ARM-Projects/ILI9341/build/main.o"
+  }
+]
