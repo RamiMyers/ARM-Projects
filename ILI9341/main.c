@@ -3,6 +3,8 @@
 #include "uart.h"
 #include "ili9341.h"
 
+// TODO: SPI Settings
+
 int main(void) {
     const char str[] = "World!";
 
