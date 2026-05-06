@@ -2,12 +2,15 @@
 #define ILI9341_H
 
 #include "stm32f4xx.h"
+#include "spi.h"
 
 static inline void ILI_Init();
 static inline void ILI_GPIO_Setup();
+static inline void ILI_Write(uint8_t cmd);
 
 static inline void ILI_Init() {
     ILI_GPIO_Setup();
+    SPI1_Init();
 }
 
 static inline void ILI_GPIO_Setup() {
@@ -59,6 +62,19 @@ static inline void ILI_GPIO_Setup() {
    // Configure mode to GPO (01)
    GPIOC->MODER |=  GPIO_MODER_MODE7_0;
    GPIOC->MODER &= ~GPIO_MODER_MODE7_1;
+}
+
+static inline void ILI_Write(uint8_t cmd) {
+    // Wait for BSY flag to reset
+    while (SPI1->SR & SPI_SR_BSY);
+    // Pull D/C (PA6) pin low for command mode
+    GPIOA->ODR &= ~GPIO_ODR_OD6;
+    // Send Command
+    SPI1_WriteByte(cmd);
+    // Wait for BSY flag to reset
+    while (SPI1->SR & SPI_SR_BSY);
+    // Pull D/C (PA6) pin high
+    GPIOA->ODR |= GPIO_ODR_OD6;
 }
 
 #endif
