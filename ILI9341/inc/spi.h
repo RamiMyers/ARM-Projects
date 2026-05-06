@@ -31,7 +31,7 @@ static inline void SPI1_Init() {
     SPI1->CR1 |= SPI_CR1_SPE;
 }
 
-static inline void SPI1_WriteByte(uint8_t data) {
+static inline void SPI1_Write(uint16_t data) {
     // Wait for TXE
     while (!(SPI1->SR & SPI_SR_TXE));
     // Send Data

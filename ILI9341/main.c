@@ -3,17 +3,33 @@
 #include "uart.h"
 #include "ili9341.h"
 
-// TODO: SPI Settings
+// TODO: Debug display not changing
 
 int main(void) {
-    const char str[] = "World!";
+    int iter = 0;
+    int on = 0;
 
     USART2_Init();
     ILI_Init();
 
+    ILI_SendCmd(0x2A);
+    ILI_Write16(0x0);
+    ILI_Write16((uint16_t)239);
+
+    ILI_SendCmd(0x2B);
+    ILI_Write16(0x0);
+    ILI_Write16((uint16_t)319);
+
+    ILI_SendCmd(0x2C);
+
     while (1) {
-        SYSTICK_MsecDelay(1000);
-        printf("Hello, %s\r\n", str);
+        for (iter = 0; iter < (240*320); ++iter) {
+            if (on)
+                ILI_Write16(0xF800);
+            else
+                ILI_Write16(0x001F);
+        }
+        on != on;
     }
     return 0;
 }
