@@ -3,6 +3,7 @@
 #include "uart.h"
 #include "ili9341.h"
 
+// TODO: Refactor spi.h to have a single write function. Create 2 write functions in ili9341.h: send a command with D/C low, and send a command with D/C high
 // TODO: Debug display not changing
 
 int main(void) {
